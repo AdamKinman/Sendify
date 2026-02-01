@@ -41,7 +41,7 @@ async function makeRequestWithCaptcha(url: string, headers: Record<string, strin
             console.warn(`Request failed, retrying... (${failedAttempts + 1}/${maxAttempts})`);
             return await makeRequestWithCaptcha(url, headers, maxAttempts, failedAttempts + 1);
         } else {
-            throw new Error(`Request failed after ${maxAttempts} attempts: ${error}`);
+            throw new Error(`Request failed after ${maxAttempts} attempts. Most likely the reference number is invalid.`);
         }
     }
 }
