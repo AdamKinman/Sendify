@@ -1,3 +1,8 @@
+/*
+This file contains TypeScript type definitions for types used throughout the project
+*/
+
+
 export type ShipmentApiResponse = {
     countryCode: string;
     transportMode: string;
@@ -42,7 +47,7 @@ export type FormattedEvent = {
 }
 
 
-//  | string is used instead of | null to match the "No info regarding ..." strings in formatted output
+//  "| string" is used instead of "| null" to match the "No info regarding ..." strings in formatted output
 export type FormattedTrackingInfo = {
     weight: number | string;
     weightUnit: string | string;

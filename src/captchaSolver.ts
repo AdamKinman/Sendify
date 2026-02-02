@@ -1,16 +1,16 @@
 import crypto from 'crypto';
 
 /*
+This file exports the solveCaptcha function which takes a captcha-puzzle header string
+and returns the string to use in the Captcha-Solution header
+*/
+
+/*
 The API uses a proof-of-work captcha system:
 1. First request returns 429 with a "captcha-puzzle" header
 2. The puzzle contains base64 encoded JWTs with puzzle data
 3. Solution involves finding a nonce where double SHA-256 hash is below target
 4. Send solution in "Captcha-Solution" header with retry request
-*/
-
-/*
-This file exports the solveCaptcha function which takes a captcha-puzzle header string
-and returns the string to use in the Captcha-Solution header
 */
     
 // Convert number to 8-byte Int8Array

@@ -4,6 +4,10 @@ import { z } from "zod";
 import { fetchTracking } from "./dbschenkerApi.js";
 import { formatPackageInformation } from "./formatPackageInformation.js";
 
+/*
+This file initiates the MCP server and registers the tool for fetching tracking info
+*/
+
 const server = new McpServer({
   name: "DB Schenker Tracking Info",
   version: "1.0.0",
