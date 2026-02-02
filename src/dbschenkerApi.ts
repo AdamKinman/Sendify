@@ -15,10 +15,10 @@ async function makeRequestWithCaptcha(url: string, headers: Record<string, strin
 
         if (response1.status === 429) {
             const puzzleHeader = response1.headers.get('captcha-puzzle');
-            
             if (!puzzleHeader) {
                 throw new Error('Rate limited but no captcha puzzle provided');
-            }        
+            }
+
             const solution = await solveCaptcha(puzzleHeader);
             // Retry with solution
             const response2 = await fetch(url, {
@@ -27,21 +27,31 @@ async function makeRequestWithCaptcha(url: string, headers: Record<string, strin
                     'Captcha-Solution': solution
                 }
             });
+
             if (!response2.ok) {
+                if(response2.status === 404){
+                    throw new Error('Shipment not found');
+                }
+                if(response2.status === 401){
+                    throw new Error('Not authorized to access this shipment');
+                }
                 throw new Error(`API request failed: ${response2.status} ${response2.statusText}`);
             }
+
             return await response2.json();
         }
+        
         if (!response1.ok) {
             throw new Error(`API request failed: ${response1.status} ${response1.statusText}`);
         }
         return await response1.json();
+
     } catch (error) {
         if (failedAttempts < maxAttempts) {
             console.warn(`Request failed, retrying... (${failedAttempts + 1}/${maxAttempts})`);
             return await makeRequestWithCaptcha(url, headers, maxAttempts, failedAttempts + 1);
         } else {
-            throw new Error(`Request failed after ${maxAttempts} attempts. Most likely the reference number is invalid.`);
+            throw new Error(`Request failed after ${maxAttempts} attempts: ${(error as Error).message}`);
         }
     }
 }
